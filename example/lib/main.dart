@@ -11,8 +11,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _selectedSegment = 'all';
-  String _selectedThreeSegment = 'all';
+  String _selectedSegment_0 = 'all';
+  String _selectedSegment_1 = 'all';
+  String _selectedSegment_2 = 'all';
+  String _selectedSegment_3 = 'all';
+  String _selectedSegment_4 = 'all';
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +37,10 @@ class _MyAppState extends State<MyApp> {
                     'all': 'All',
                     'starred': 'Starred',
                   },
-                  value: _selectedSegment,
+                  value: _selectedSegment_0,
                   onValueChanged: (segment) {
                     setState(() {
-                      _selectedSegment = segment;
+                      _selectedSegment_0 = segment;
                     });
                   },
                 ),
@@ -73,9 +76,10 @@ class _MyAppState extends State<MyApp> {
                         'all': 'All',
                         'starred': 'Starred',
                       },
-                      value: _selectedSegment,
+                      value: _selectedSegment_1,
                       activeStyle: TextStyle(
                         color: Colors.white,
+                        fontWeight: FontWeight.w600,
                       ),
                       inactiveStyle: TextStyle(
                         color: Colors.white54,
@@ -84,7 +88,7 @@ class _MyAppState extends State<MyApp> {
                       sliderColor: Colors.deepOrange,
                       onValueChanged: (segment) {
                         setState(() {
-                          _selectedSegment = segment;
+                          _selectedSegment_1 = segment;
                         });
                       },
                     ),
@@ -96,9 +100,10 @@ class _MyAppState extends State<MyApp> {
                         'all': 'All',
                         'starred': 'Starred',
                       },
-                      value: _selectedSegment,
+                      value: _selectedSegment_2,
                       activeStyle: TextStyle(
                         color: Colors.deepOrange,
+                        fontWeight: FontWeight.w600,
                       ),
                       inactiveStyle: TextStyle(
                         color: Colors.orange,
@@ -107,7 +112,7 @@ class _MyAppState extends State<MyApp> {
                       sliderColor: Colors.white,
                       onValueChanged: (segment) {
                         setState(() {
-                          _selectedSegment = segment;
+                          _selectedSegment_2 = segment;
                         });
                       },
                     ),
@@ -117,15 +122,45 @@ class _MyAppState extends State<MyApp> {
                 AdvancedSegment(
                   segments: {
                     'all': 'All',
-                    'starred': 'Starred',
-                    'favorite': 'Favorite',
+                    'primary': 'Primary',
+                    'secondary': 'Secondary',
+                    'tertiary': 'Tertiary',
                   },
-                  value: _selectedThreeSegment,
+                  value: _selectedSegment_3,
                   onValueChanged: (segment) {
                     setState(() {
-                      _selectedThreeSegment = segment;
+                      _selectedSegment_3 = segment;
                     });
                   },
+                ),
+                _buildLabel('Multiple Items'),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(20),
+                  color: Colors.black87,
+                  child: Center(
+                    child: AdvancedSegment(
+                      segments: {
+                        'all': 'All',
+                        'missed': 'Missed',
+                      },
+                      value: _selectedSegment_4,
+                      backgroundColor: Colors.white10,
+                      activeStyle: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      inactiveStyle: TextStyle(
+                        color: Colors.white,
+                      ),
+                      sliderColor: Colors.white38,
+                      onValueChanged: (segment) {
+                        setState(() {
+                          _selectedSegment_4 = segment;
+                        });
+                      },
+                    ),
+                  ),
                 ),
               ],
             ),

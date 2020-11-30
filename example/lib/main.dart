@@ -133,7 +133,7 @@ class _MyAppState extends State<MyApp> {
                     });
                   },
                 ),
-                _buildLabel('Multiple Items'),
+                _buildLabel('Black Style'),
                 Container(
                   width: double.infinity,
                   padding: EdgeInsets.all(20),

@@ -108,7 +108,6 @@ class _AdvancedSegmentState extends State<AdvancedSegment> with SingleTickerProv
       child: Opacity(
         opacity: widget.onValueChanged != null ? 1 : 0.75,
         child: Stack(
-          clipBehavior: Clip.antiAlias,
           children: [
             _buildSlider(),
             _buildSegments(),
@@ -119,28 +118,26 @@ class _AdvancedSegmentState extends State<AdvancedSegment> with SingleTickerProv
   }
 
   Widget _buildSlider() {
-    final theme = Theme.of(context);
-
-    final animation = Tween<Offset>(
-      begin: Offset(0, 0),
-      end: Offset(_itemSize.width * (widget.segments.length - 1), 0),
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.linear,
-    ));
-
     return AnimatedBuilder(
       animation: _animationController,
       builder: (context, child) {
         return Transform.translate(
-          offset: animation.value,
+          offset: Tween<Offset>(
+            begin: Offset(0, 0),
+            end: Offset(_itemSize.width * (widget.segments.length - 1), 0),
+          )
+              .animate(CurvedAnimation(
+                parent: _animationController,
+                curve: Curves.linear,
+              ))
+              .value,
           child: child,
         );
       },
       child: Container(
         margin: EdgeInsets.all(widget.sliderOffset),
         decoration: BoxDecoration(
-          color: widget.sliderColor ?? theme.cardColor,
+          color: widget.sliderColor,
           borderRadius: widget.borderRadius.subtract(BorderRadius.all(Radius.circular(widget.sliderOffset))),
           boxShadow: <BoxShadow>[
             BoxShadow(
@@ -158,34 +155,30 @@ class _AdvancedSegmentState extends State<AdvancedSegment> with SingleTickerProv
   }
 
   Widget _buildSegments() {
-    final segmentsList = widget.segments.entries.map((entry) {
-      final selected = widget.value == entry.key;
-
-      return GestureDetector(
-        onTap: () => _handleSegmentPressed(entry.key),
-        child: Container(
-          width: _itemSize.width,
-          height: _itemSize.height,
-          color: Colors.transparent,
-          child: AnimatedDefaultTextStyle(
-            duration: _animationDuration,
-            style: _defaultTextStyle.merge(selected ? widget.activeStyle : widget.inactiveStyle),
-            overflow: TextOverflow.clip,
-            maxLines: 1,
-            softWrap: false,
-            child: Center(
-              child: Text(entry.value),
-            ),
-          ),
-        ),
-      );
-    }).toList(growable: false);
-
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: segmentsList,
+      children: widget.segments.entries.map((entry) {
+        return GestureDetector(
+          onTap: () => _handleSegmentPressed(entry.key),
+          child: Container(
+            width: _itemSize.width,
+            height: _itemSize.height,
+            color: Colors.transparent,
+            child: AnimatedDefaultTextStyle(
+              duration: _animationDuration,
+              style: _defaultTextStyle.merge(widget.value == entry.key ? widget.activeStyle : widget.inactiveStyle),
+              overflow: TextOverflow.clip,
+              maxLines: 1,
+              softWrap: false,
+              child: Center(
+                child: Text(entry.value),
+              ),
+            ),
+          ),
+        );
+      }).toList(growable: false),
     );
   }
 
@@ -205,11 +198,8 @@ class _AdvancedSegmentState extends State<AdvancedSegment> with SingleTickerProv
     return textPainter.size;
   }
 
-  double _obtainAnimationValue() {
-    final index = widget.segments.keys.toList(growable: false).indexOf(widget.value).toDouble();
-
-    return index / (widget.segments.keys.length - 1);
-  }
+  double _obtainAnimationValue() =>
+      widget.segments.keys.toList(growable: false).indexOf(widget.value).toDouble() / (widget.segments.keys.length - 1);
 
   void _handleSegmentPressed(String value) {
     if (widget.onValueChanged != null) {

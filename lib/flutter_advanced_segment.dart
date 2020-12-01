@@ -206,4 +206,11 @@ class _AdvancedSegmentState extends State<AdvancedSegment> with SingleTickerProv
       widget.onValueChanged(value);
     }
   }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+
+    super.dispose();
+  }
 }

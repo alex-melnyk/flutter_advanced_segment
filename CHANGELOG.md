@@ -1,3 +1,13 @@
+## 0.0.3+3
+
+* Changelog information provided.
+
+## 0.0.3+2
+
+* Code formatting fixed.
+* Documentation url fixed.
+
+
 ## 0.0.1
 
-* TODO: Describe initial release.
+* Basic implementation of widget

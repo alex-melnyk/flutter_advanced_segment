@@ -1,10 +1,10 @@
 name: flutter_advanced_segment
 description: An advanced segment widget, that can be fully customized.
-version: 0.0.3
+version: 0.0.3+2
 homepage: https://github.com/alex-melnyk/flutter_advanced_segment
 repository: https://github.com/alex-melnyk/flutter_advanced_segment
 issue_tracker: https://github.com/alex-melnyk/flutter_advanced_segment/issues
-documentation: https://github.com/alex-melnyk/flutter_advanced_segment/README.md
+documentation: https://github.com/alex-melnyk/flutter_advanced_segment/blob/master/README.md
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

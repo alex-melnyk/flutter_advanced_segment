@@ -37,7 +37,8 @@ class AdvancedSegment extends StatefulWidget {
   _AdvancedSegmentState createState() => _AdvancedSegmentState();
 }
 
-class _AdvancedSegmentState extends State<AdvancedSegment> with SingleTickerProviderStateMixin {
+class _AdvancedSegmentState extends State<AdvancedSegment>
+    with SingleTickerProviderStateMixin {
   final _defaultTextStyle = TextStyle(
     fontWeight: FontWeight.w400,
     fontSize: 14,
@@ -64,7 +65,8 @@ class _AdvancedSegmentState extends State<AdvancedSegment> with SingleTickerProv
   void initSizes() {
     final maxSize = widget.segments.values
         .map((text) => _obtainTextSize(text))
-        .reduce((value, element) => value.width.compareTo(element.width) >= 1 ? value : element);
+        .reduce((value, element) =>
+            value.width.compareTo(element.width) >= 1 ? value : element);
 
     _itemSize = Size(
       maxSize.width + widget.itemPadding.horizontal,
@@ -138,7 +140,8 @@ class _AdvancedSegmentState extends State<AdvancedSegment> with SingleTickerProv
         margin: EdgeInsets.all(widget.sliderOffset),
         decoration: BoxDecoration(
           color: widget.sliderColor,
-          borderRadius: widget.borderRadius.subtract(BorderRadius.all(Radius.circular(widget.sliderOffset))),
+          borderRadius: widget.borderRadius
+              .subtract(BorderRadius.all(Radius.circular(widget.sliderOffset))),
           boxShadow: <BoxShadow>[
             BoxShadow(
               color: Colors.black26,
@@ -168,7 +171,9 @@ class _AdvancedSegmentState extends State<AdvancedSegment> with SingleTickerProv
             color: Colors.transparent,
             child: AnimatedDefaultTextStyle(
               duration: _animationDuration,
-              style: _defaultTextStyle.merge(widget.value == entry.key ? widget.activeStyle : widget.inactiveStyle),
+              style: _defaultTextStyle.merge(widget.value == entry.key
+                  ? widget.activeStyle
+                  : widget.inactiveStyle),
               overflow: TextOverflow.clip,
               maxLines: 1,
               softWrap: false,
@@ -199,7 +204,11 @@ class _AdvancedSegmentState extends State<AdvancedSegment> with SingleTickerProv
   }
 
   double _obtainAnimationValue() =>
-      widget.segments.keys.toList(growable: false).indexOf(widget.value).toDouble() / (widget.segments.keys.length - 1);
+      widget.segments.keys
+          .toList(growable: false)
+          .indexOf(widget.value)
+          .toDouble() /
+      (widget.segments.keys.length - 1);
 
   void _handleSegmentPressed(String value) {
     if (widget.onValueChanged != null) {

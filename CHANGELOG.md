@@ -1,3 +1,7 @@
+## 0.0.3.4
+
+* Animation duration property added to set manually.
+
 ## 0.0.3+3
 
 * Changelog information provided.

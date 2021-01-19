@@ -66,6 +66,7 @@ AdvancedSegment(
     horizontal: 15,
     vertical: 10,
   ),
+  animationDuration: Duration(milliseconds: 250),
   onValueChanged: (value) => setState(() { // ChangeHandler<String>
     _value = value;
   }),

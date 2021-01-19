@@ -18,6 +18,7 @@ class AdvancedSegment extends StatefulWidget {
     this.backgroundColor = Colors.black26,
     this.sliderColor = Colors.white,
     this.sliderOffset = 2.0,
+    this.animationDuration = const Duration(milliseconds: 250),
   })  : assert(segments != null, 'Property "segments" can\'t be null'),
         assert(segments.length > 1, 'Minimum segments length is 2'),
         super(key: key);
@@ -32,19 +33,18 @@ class AdvancedSegment extends StatefulWidget {
   final Color sliderColor;
   final Color backgroundColor;
   final double sliderOffset;
+  final Duration animationDuration;
 
   @override
   _AdvancedSegmentState createState() => _AdvancedSegmentState();
 }
 
-class _AdvancedSegmentState extends State<AdvancedSegment>
-    with SingleTickerProviderStateMixin {
+class _AdvancedSegmentState extends State<AdvancedSegment> with SingleTickerProviderStateMixin {
   final _defaultTextStyle = TextStyle(
     fontWeight: FontWeight.w400,
     fontSize: 14,
     color: Colors.black,
   );
-  final _animationDuration = Duration(milliseconds: 250);
   AnimationController _animationController;
   Size _itemSize;
   Size _containerSize;
@@ -56,7 +56,7 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
     _animationController = AnimationController(
       vsync: this,
       value: _obtainAnimationValue(),
-      duration: _animationDuration,
+      duration: widget.animationDuration,
     );
 
     super.initState();
@@ -65,8 +65,7 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
   void initSizes() {
     final maxSize = widget.segments.values
         .map((text) => _obtainTextSize(text))
-        .reduce((value, element) =>
-            value.width.compareTo(element.width) >= 1 ? value : element);
+        .reduce((value, element) => value.width.compareTo(element.width) >= 1 ? value : element);
 
     _itemSize = Size(
       maxSize.width + widget.itemPadding.horizontal,
@@ -91,7 +90,7 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
 
     _animationController.animateTo(
       _obtainAnimationValue(),
-      duration: _animationDuration,
+      duration: widget.animationDuration,
     );
 
     super.didUpdateWidget(oldWidget);
@@ -140,8 +139,7 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
         margin: EdgeInsets.all(widget.sliderOffset),
         decoration: BoxDecoration(
           color: widget.sliderColor,
-          borderRadius: widget.borderRadius
-              .subtract(BorderRadius.all(Radius.circular(widget.sliderOffset))),
+          borderRadius: widget.borderRadius.subtract(BorderRadius.all(Radius.circular(widget.sliderOffset))),
           boxShadow: <BoxShadow>[
             BoxShadow(
               color: Colors.black26,
@@ -170,10 +168,8 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
             height: _itemSize.height,
             color: Colors.transparent,
             child: AnimatedDefaultTextStyle(
-              duration: _animationDuration,
-              style: _defaultTextStyle.merge(widget.value == entry.key
-                  ? widget.activeStyle
-                  : widget.inactiveStyle),
+              duration: widget.animationDuration,
+              style: _defaultTextStyle.merge(widget.value == entry.key ? widget.activeStyle : widget.inactiveStyle),
               overflow: TextOverflow.clip,
               maxLines: 1,
               softWrap: false,
@@ -204,11 +200,7 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
   }
 
   double _obtainAnimationValue() =>
-      widget.segments.keys
-          .toList(growable: false)
-          .indexOf(widget.value)
-          .toDouble() /
-      (widget.segments.keys.length - 1);
+      widget.segments.keys.toList(growable: false).indexOf(widget.value).toDouble() / (widget.segments.keys.length - 1);
 
   void _handleSegmentPressed(String value) {
     if (widget.onValueChanged != null) {

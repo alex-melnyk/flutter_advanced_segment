@@ -1,5 +1,5 @@
 # flutter_advanced_segment
-An advanced segment widget, that can be fully customized.
+An advanced segment widget, that can be fully customized with bunch of properties, just try it and enjoy! 
 
 | State 1 | State 2 |
 |:-:|:-:|

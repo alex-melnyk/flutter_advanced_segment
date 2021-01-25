@@ -1,3 +1,8 @@
+## 0.0.3+5
+
+* Pub point fixes.
+
+
 ## 0.0.3+4
 
 * Animation duration property added to set manually.

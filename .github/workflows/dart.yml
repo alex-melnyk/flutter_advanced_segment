@@ -9,9 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
-    container:
-      image:  google/flutter:latest
 
     steps:
       - uses: actions/checkout@v2

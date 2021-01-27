@@ -23,16 +23,27 @@ class AdvancedSegment extends StatefulWidget {
         assert(segments.length > 1, 'Minimum segments length is 2'),
         super(key: key);
 
+  /// Map of segments should be more than one keys
   final Map<String, String> segments;
+  /// Selected key
   final String value;
+  /// Active text style
   final TextStyle activeStyle;
+  /// Inactive text style
   final TextStyle inactiveStyle;
+  /// Padding of each item
   final EdgeInsetsGeometry itemPadding;
+  /// Common border radius
   final BorderRadius borderRadius;
+  /// Value changed event handler
   final ValueChanged<String> onValueChanged;
+  /// Color of slider
   final Color sliderColor;
+  /// Layout background color
   final Color backgroundColor;
+  /// Gap between slider and layout
   final double sliderOffset;
+  /// Selection animation duration
   final Duration animationDuration;
 
   @override

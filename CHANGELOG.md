@@ -1,3 +1,7 @@
+## 0.0.3+6
+
+* Widget documentation improved.
+
 ## 0.0.3+5
 
 * Pub point fixes.

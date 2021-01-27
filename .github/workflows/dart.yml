@@ -15,6 +15,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      
+      - uses: subosito/flutter-action@v1
 
       - name: Install dependencies
         run: flutter pub get
@@ -23,6 +25,7 @@ jobs:
       - name: Get flutter version
         id: get_flutter_version
         uses: its404/get-flutter-version@v1.0.0
+        
       - name: Output flutter version
         run: echo 'version_number:' ${{ steps.get_flutter_version.outputs.version_number }} ' build_number:' ${{ steps.get_flutter_version.outputs.build_number }}
 

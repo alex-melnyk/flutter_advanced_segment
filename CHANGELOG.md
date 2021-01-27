@@ -1,3 +1,7 @@
+## 0.0.3+7
+
+* Code formatting fixed.
+
 ## 0.0.3+6
 
 * Widget documentation improved.

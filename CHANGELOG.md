@@ -1,3 +1,7 @@
+## 0.0.3+8
+
+* License changed to MIT.
+
 ## 0.0.3+7
 
 * Code formatting fixed.

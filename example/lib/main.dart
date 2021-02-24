@@ -11,11 +11,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _selectedSegment_0 = 'all';
-  String _selectedSegment_1 = 'all';
-  String _selectedSegment_2 = 'all';
-  String _selectedSegment_3 = 'all';
-  String _selectedSegment_4 = 'all';
+  final _selectedSegment_0 = AdvancedSegmentController('all');
+  final _selectedSegment_1 = AdvancedSegmentController('all');
+  final _selectedSegment_2 = AdvancedSegmentController('all');
+  final _selectedSegment_3 = AdvancedSegmentController('all');
+  final _selectedSegment_4 = AdvancedSegmentController('all');
 
   @override
   Widget build(BuildContext context) {
@@ -37,12 +37,7 @@ class _MyAppState extends State<MyApp> {
                     'all': 'All',
                     'starred': 'Starred',
                   },
-                  value: _selectedSegment_0,
-                  onValueChanged: (segment) {
-                    setState(() {
-                      _selectedSegment_0 = segment;
-                    });
-                  },
+                  controller: _selectedSegment_0,
                 ),
                 _buildLabel('Disabled'),
                 Row(
@@ -53,7 +48,6 @@ class _MyAppState extends State<MyApp> {
                         'all': 'All',
                         'starred': 'Starred',
                       },
-                      value: 'all',
                     ),
                     SizedBox(
                       width: 10,
@@ -63,7 +57,6 @@ class _MyAppState extends State<MyApp> {
                         'all': 'All',
                         'starred': 'Starred',
                       },
-                      value: 'starred',
                     )
                   ],
                 ),
@@ -72,11 +65,11 @@ class _MyAppState extends State<MyApp> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     AdvancedSegment(
+                      controller: _selectedSegment_1,
                       segments: {
                         'all': 'All',
                         'starred': 'Starred',
                       },
-                      value: _selectedSegment_1,
                       activeStyle: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
@@ -86,21 +79,16 @@ class _MyAppState extends State<MyApp> {
                       ),
                       backgroundColor: Colors.orange,
                       sliderColor: Colors.deepOrange,
-                      onValueChanged: (segment) {
-                        setState(() {
-                          _selectedSegment_1 = segment;
-                        });
-                      },
                     ),
                     SizedBox(
                       width: 10,
                     ),
                     AdvancedSegment(
+                      controller: _selectedSegment_2,
                       segments: {
                         'all': 'All',
                         'starred': 'Starred',
                       },
-                      value: _selectedSegment_2,
                       activeStyle: TextStyle(
                         color: Colors.deepOrange,
                         fontWeight: FontWeight.w600,
@@ -110,27 +98,17 @@ class _MyAppState extends State<MyApp> {
                       ),
                       backgroundColor: Colors.black12,
                       sliderColor: Colors.white,
-                      onValueChanged: (segment) {
-                        setState(() {
-                          _selectedSegment_2 = segment;
-                        });
-                      },
                     ),
                   ],
                 ),
                 _buildLabel('Multiple Items'),
                 AdvancedSegment(
+                  controller: _selectedSegment_3,
                   segments: {
                     'all': 'All',
                     'primary': 'Primary',
                     'secondary': 'Secondary',
                     'tertiary': 'Tertiary',
-                  },
-                  value: _selectedSegment_3,
-                  onValueChanged: (segment) {
-                    setState(() {
-                      _selectedSegment_3 = segment;
-                    });
                   },
                 ),
                 _buildLabel('Black Style'),
@@ -140,11 +118,11 @@ class _MyAppState extends State<MyApp> {
                   color: Colors.black87,
                   child: Center(
                     child: AdvancedSegment(
+                      controller: _selectedSegment_4,
                       segments: {
                         'all': 'All',
                         'missed': 'Missed',
                       },
-                      value: _selectedSegment_4,
                       backgroundColor: Colors.white10,
                       activeStyle: TextStyle(
                         color: Colors.white,
@@ -154,11 +132,6 @@ class _MyAppState extends State<MyApp> {
                         color: Colors.white,
                       ),
                       sliderColor: Colors.white38,
-                      onValueChanged: (segment) {
-                        setState(() {
-                          _selectedSegment_4 = segment;
-                        });
-                      },
                     ),
                   ),
                 ),

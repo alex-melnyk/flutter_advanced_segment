@@ -1,3 +1,7 @@
+## 1.0.0
+
+* Redesigned to use controller feature.
+
 ## 0.0.3+8
 
 * License changed to MIT.

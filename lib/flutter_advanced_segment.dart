@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
+part 'advanced_segment_controller.dart';
+
 class AdvancedSegment extends StatefulWidget {
-  AdvancedSegment({
+  const AdvancedSegment({
     Key key,
     @required this.segments,
-    @required this.value,
-    this.onValueChanged,
+    this.controller,
     this.activeStyle = const TextStyle(
       fontWeight: FontWeight.w600,
     ),
@@ -23,37 +24,34 @@ class AdvancedSegment extends StatefulWidget {
         assert(segments.length > 1, 'Minimum segments length is 2'),
         super(key: key);
 
-  /// Map of segments should be more than one keys
+  /// Controls segments selection.
+  final AdvancedSegmentController controller;
+
+  /// Map of segments should be more than one keys.
   final Map<String, String> segments;
 
-  /// Selected key
-  final String value;
-
-  /// Active text style
+  /// Active text style.
   final TextStyle activeStyle;
 
-  /// Inactive text style
+  /// Inactive text style.
   final TextStyle inactiveStyle;
 
-  /// Padding of each item
+  /// Padding of each item.
   final EdgeInsetsGeometry itemPadding;
 
-  /// Common border radius
+  /// Common border radius.
   final BorderRadius borderRadius;
 
-  /// Value changed event handler
-  final ValueChanged<String> onValueChanged;
-
-  /// Color of slider
+  /// Color of slider.
   final Color sliderColor;
 
-  /// Layout background color
+  /// Layout background color.
   final Color backgroundColor;
 
-  /// Gap between slider and layout
+  /// Gap between slider and layout.
   final double sliderOffset;
 
-  /// Selection animation duration
+  /// Selection animation duration.
   final Duration animationDuration;
 
   @override
@@ -71,8 +69,24 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
   Size _itemSize;
   Size _containerSize;
 
+  AdvancedSegmentController _controller;
+
   @override
   void initState() {
+    super.initState();
+
+    _controller = widget.controller ??
+        AdvancedSegmentController(widget.segments.keys.first);
+
+    _controller.addListener(() {
+      final animationValue = _obtainAnimationValue();
+
+      _animationController.animateTo(
+        animationValue,
+        duration: widget.animationDuration,
+      );
+    });
+
     initSizes();
 
     _animationController = AnimationController(
@@ -80,8 +94,6 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
       value: _obtainAnimationValue(),
       duration: widget.animationDuration,
     );
-
-    super.initState();
   }
 
   void initSizes() {
@@ -103,20 +115,13 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
 
   @override
   void didUpdateWidget(covariant AdvancedSegment oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
     if (oldWidget.segments != widget.segments) {
       initSizes();
+
+      _animationController.value = _obtainAnimationValue();
     }
-
-    if (oldWidget.value == widget.value) {
-      return super.didUpdateWidget(oldWidget);
-    }
-
-    _animationController.animateTo(
-      _obtainAnimationValue(),
-      duration: widget.animationDuration,
-    );
-
-    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -130,7 +135,7 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
         borderRadius: widget.borderRadius,
       ),
       child: Opacity(
-        opacity: widget.onValueChanged != null ? 1 : 0.75,
+        opacity: widget.controller != null ? 1 : 0.75,
         child: Stack(
           children: [
             _buildSlider(),
@@ -180,32 +185,37 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
   }
 
   Widget _buildSegments() {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: widget.segments.entries.map((entry) {
-        return GestureDetector(
-          onTap: () => _handleSegmentPressed(entry.key),
-          child: Container(
-            width: _itemSize.width,
-            height: _itemSize.height,
-            color: Colors.transparent,
-            child: AnimatedDefaultTextStyle(
-              duration: widget.animationDuration,
-              style: _defaultTextStyle.merge(widget.value == entry.key
-                  ? widget.activeStyle
-                  : widget.inactiveStyle),
-              overflow: TextOverflow.clip,
-              maxLines: 1,
-              softWrap: false,
-              child: Center(
-                child: Text(entry.value),
+    return ValueListenableBuilder(
+      valueListenable: _controller,
+      builder: (_, value, __) {
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: widget.segments.entries.map((entry) {
+            return GestureDetector(
+              onTap: () => _handleSegmentPressed(entry.key),
+              child: Container(
+                width: _itemSize.width,
+                height: _itemSize.height,
+                color: Colors.transparent,
+                child: AnimatedDefaultTextStyle(
+                  duration: widget.animationDuration,
+                  style: _defaultTextStyle.merge(value == entry.key
+                      ? widget.activeStyle
+                      : widget.inactiveStyle),
+                  overflow: TextOverflow.clip,
+                  maxLines: 1,
+                  softWrap: false,
+                  child: Center(
+                    child: Text(entry.value),
+                  ),
+                ),
               ),
-            ),
-          ),
+            );
+          }).toList(growable: false),
         );
-      }).toList(growable: false),
+      },
     );
   }
 
@@ -225,22 +235,27 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
     return textPainter.size;
   }
 
-  double _obtainAnimationValue() =>
-      widget.segments.keys
-          .toList(growable: false)
-          .indexOf(widget.value)
-          .toDouble() /
-      (widget.segments.keys.length - 1);
+  double _obtainAnimationValue() {
+    return widget.segments.keys
+            .toList(growable: false)
+            .indexOf(_controller.value)
+            .toDouble() /
+        (widget.segments.keys.length - 1);
+  }
 
   void _handleSegmentPressed(String value) {
-    if (widget.onValueChanged != null) {
-      widget.onValueChanged(value);
+    if (widget.controller != null) {
+      _controller.value = value;
     }
   }
 
   @override
   void dispose() {
     _animationController.dispose();
+
+    if (widget.controller == null) {
+      _controller.dispose();
+    }
 
     super.dispose();
   }

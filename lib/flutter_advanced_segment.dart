@@ -4,8 +4,8 @@ part 'advanced_segment_controller.dart';
 
 class AdvancedSegment extends StatefulWidget {
   const AdvancedSegment({
-    Key? key,
-    required this.segments,
+    Key key,
+    @required this.segments,
     this.controller,
     this.activeStyle = const TextStyle(
       fontWeight: FontWeight.w600,
@@ -24,7 +24,7 @@ class AdvancedSegment extends StatefulWidget {
         super(key: key);
 
   /// Controls segments selection.
-  final AdvancedSegmentController? controller;
+  final AdvancedSegmentController controller;
 
   /// Map of segments should be more than one keys.
   final Map<String, String> segments;
@@ -33,7 +33,7 @@ class AdvancedSegment extends StatefulWidget {
   final TextStyle activeStyle;
 
   /// Inactive text style.
-  final TextStyle? inactiveStyle;
+  final TextStyle inactiveStyle;
 
   /// Padding of each item.
   final EdgeInsetsGeometry itemPadding;
@@ -64,10 +64,11 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
     fontSize: 14,
     color: Colors.black,
   );
-  late AdvancedSegmentController _controller;
-  late AnimationController _animationController;
-  late Size _itemSize;
-  late Size _containerSize;
+  AnimationController _animationController;
+  Size _itemSize;
+  Size _containerSize;
+
+  AdvancedSegmentController _controller;
 
   @override
   void initState() {

@@ -1,3 +1,7 @@
+## 1.0.0+2
+
+* Code fixes.
+
 ## 1.0.0+1
 
 * Documentation updated.

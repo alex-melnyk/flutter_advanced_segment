@@ -25,16 +25,15 @@ import 'package:flutter_advanced_segment/flutter_advanced_segment.dart';
 Regular Segment
 
 ```dart
+// Create a controller
+final _controller = AdvancedSegmentController('all');
 //...
 AdvancedSegment(
+  controller: _controller, // AdvancedSegmentController
   segments: { // Map<String, String>
     'all': 'All',
     'starred': 'Starred',
   },
-  value: _value, // String
-  onValueChanged: (value) => setState(() { // ChangeHandler<String>
-    _value = value;
-  }),
 ),
 //...
 ``` 
@@ -42,15 +41,17 @@ AdvancedSegment(
 Customized Segment
 
 ```dart
+// Create a controller
+final _controller = AdvancedSegmentController('all');
 //...
 AdvancedSegment(
+  controller: _controller, // AdvancedSegmentController
   segments: { // Map<String, String>
     'all': 'All',
     'primary': 'Primary',
     'secondary': 'Secondary',
     'tertiary': 'Tertiary',
   },
-  value: _value, // String
   activeStyle: TextStyle( // TextStyle
     color: Colors.white,
     fontWeight: FontWeight.w600,
@@ -66,10 +67,7 @@ AdvancedSegment(
     horizontal: 15,
     vertical: 10,
   ),
-  animationDuration: Duration(milliseconds: 250),
-  onValueChanged: (value) => setState(() { // ChangeHandler<String>
-    _value = value;
-  }),
+  animationDuration: Duration(milliseconds: 250), // Duration
 ),
 //...
 ``` 

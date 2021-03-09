@@ -1,3 +1,7 @@
+## 2.0.0
+
+* Null Safety implemented.
+
 ## 1.0.0+2
 
 * Code fixes.

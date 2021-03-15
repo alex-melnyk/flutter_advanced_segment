@@ -22,7 +22,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Flutter Advanced Segment'),
+          title: const Text('Advanced Segment Example'),
         ),
         body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(

@@ -68,8 +68,8 @@ AdvancedSegment(
     vertical: 10,
   ),
   animationDuration: Duration(milliseconds: 250), // Duration
-  this.enableSliderShadow = true,
-  this.sliderShadow = const <BoxShadow>[
+  enableSliderShadow: true,
+  sliderShadow: const <BoxShadow>[
     BoxShadow(
       color: Colors.black26,
       blurRadius: 8.0,

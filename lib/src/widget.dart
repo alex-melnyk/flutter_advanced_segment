@@ -18,6 +18,12 @@ class AdvancedSegment extends StatefulWidget {
     this.sliderColor = Colors.white,
     this.sliderOffset = 2.0,
     this.animationDuration = const Duration(milliseconds: 250),
+    this.sliderShadow = const <BoxShadow>[
+      BoxShadow(
+        color: Colors.black26,
+        blurRadius: 8.0,
+      ),
+    ],
   })  : assert(segments.length > 1, 'Minimum segments amount is 2'),
         super(key: key);
 
@@ -51,6 +57,9 @@ class AdvancedSegment extends StatefulWidget {
   /// Selection animation duration.
   final Duration animationDuration;
 
+  /// Slide's Shadow
+  final List<BoxShadow>? sliderShadow;
+  
   @override
   _AdvancedSegmentState createState() => _AdvancedSegmentState();
 }
@@ -166,12 +175,7 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
           color: widget.sliderColor,
           borderRadius: widget.borderRadius
               .subtract(BorderRadius.all(Radius.circular(widget.sliderOffset))),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: Colors.black26,
-              blurRadius: 8.0,
-            ),
-          ],
+          boxShadow: widget.sliderShadow,
         ),
         child: SizedBox(
           width: _itemSize.width - widget.sliderOffset * 2,

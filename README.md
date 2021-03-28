@@ -76,7 +76,23 @@ AdvancedSegment(
   ],
 ),
 //...
-``` 
+```
+
+## AdvancedSegment Parameters
+|Parameter|Description|Type|Default|
+|:--------|:----------|:---|:------|
+|`controller`|Manage AdvancedSegment state|*AdvancedSegmentController*||
+|`segments`|Map of presented segments|*Map<String, String>*|required|
+|`activeStyle`||*TextStyle*|fontWeight: FontWeight.w600|
+|`inactiveStyle`||*TextStyle*||
+|`backgroundColor`||*Color*|Colors.black26|
+|`sliderColor`||*Color*|Colors.white|
+|`sliderOffset`||*double*|2.0|
+|`borderRadius`||*BorderRadius*|Radius.circular(8.0)|
+|`itemPadding`||*EdgeInsets*|EdgeInsets.symmetric(h: 15, v: 10)|
+|`animationDuration`||*Duration*|Duration(milliseconds: 250)|
+|`sliderShadow`||*BoxShadow*|Shadow|
+
 
 # Demo
 

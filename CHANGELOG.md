@@ -1,3 +1,7 @@
+## 2.0.1
+
+* Shadow property added.
+
 ## 2.0.0
 
 * Null Safety implemented.

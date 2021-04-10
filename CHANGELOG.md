@@ -1,3 +1,7 @@
+## 2.0.1+1
+
+* LICENSE CHANGED.
+
 ## 2.0.1
 
 * Shadow property added.

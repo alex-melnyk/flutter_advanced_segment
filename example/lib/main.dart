@@ -116,23 +116,62 @@ class _MyAppState extends State<MyApp> {
                   width: double.infinity,
                   padding: EdgeInsets.all(20),
                   color: Colors.black87,
-                  child: Center(
-                    child: AdvancedSegment(
-                      controller: _selectedSegment_4,
-                      segments: {
-                        'all': 'All',
-                        'missed': 'Missed',
-                      },
-                      backgroundColor: Colors.white10,
-                      activeStyle: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
+                  child: Column(
+                    children: [
+                      Center(
+                        child: AdvancedSegment(
+                          controller: _selectedSegment_4,
+                          segments: {
+                            'all': 'All',
+                            'missed': 'Missed',
+                          },
+                          backgroundColor: Colors.white10,
+                          activeStyle: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          inactiveStyle: TextStyle(
+                            color: Colors.white,
+                          ),
+                          sliderColor: Colors.white38,
+                        ),
                       ),
-                      inactiveStyle: TextStyle(
-                        color: Colors.white,
+                      ValueListenableBuilder<String>(
+                        valueListenable: _selectedSegment_4,
+                        builder: (_, key, __) {
+                          switch (key) {
+                            case 'all':
+                              return SizedBox(
+                                height: 240,
+                                child: Center(
+                                  child: Text(
+                                    'All calls',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            case 'missed':
+                              return SizedBox(
+                                height: 240,
+                                child: Center(
+                                  child: Text(
+                                    'Missed calls',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            default:
+                              return const SizedBox();
+                          }
+                        },
                       ),
-                      sliderColor: Colors.white38,
-                    ),
+                    ],
                   ),
                 ),
               ],

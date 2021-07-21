@@ -7,7 +7,13 @@ An advanced segment widget, that can be fully customized with bunch of propertie
 
 ## Examples
 
-Regular Segment
+### Use like TabBar
+
+```dart
+
+```
+
+### Regular Segment
 
 ```dart
 // Create a controller
@@ -23,7 +29,7 @@ AdvancedSegment(
 //...
 ``` 
 
-Customized Segment
+### Customized Segment
 
 ```dart
 // Create a controller

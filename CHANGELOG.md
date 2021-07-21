@@ -1,3 +1,7 @@
+## 2.0.1+2
+
+* Using example added.
+
 ## 2.0.1+1
 
 * LICENSE CHANGED.

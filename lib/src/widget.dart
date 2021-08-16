@@ -59,7 +59,7 @@ class AdvancedSegment extends StatefulWidget {
 
   /// Slide's Shadow
   final List<BoxShadow>? shadow;
-  
+
   @override
   _AdvancedSegmentState createState() => _AdvancedSegmentState();
 }
@@ -195,6 +195,8 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
           crossAxisAlignment: CrossAxisAlignment.center,
           children: widget.segments.entries.map((entry) {
             return GestureDetector(
+              onHorizontalDragUpdate: (detect) =>
+                  _handleSegmentMovi(detect, entry.key),
               onTap: () => _handleSegmentPressed(entry.key),
               child: Container(
                 width: _itemSize.width,
@@ -247,6 +249,20 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
   void _handleSegmentPressed(String value) {
     if (widget.controller != null) {
       _controller.value = value;
+    }
+  }
+
+  void _handleSegmentMovi(DragUpdateDetails touch, String value) {
+    if (widget.controller != null) {
+      int indexKey = widget.segments.keys.toList().indexOf(value);
+      var indexMove = (_itemSize.width * indexKey + touch.localPosition.dx) /
+          _itemSize.width;
+      try {
+        _controller.value = widget.segments.keys.elementAt(indexMove.toInt());
+        print(_controller.value);
+      } catch (e) {
+        print(e);
+      }
     }
   }
 

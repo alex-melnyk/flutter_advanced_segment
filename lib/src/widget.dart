@@ -254,9 +254,10 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
 
   void _handleSegmentMovi(DragUpdateDetails touch, String value) {
     if (widget.controller != null) {
-      int indexKey = widget.segments.keys.toList().indexOf(value);
-      var indexMove = (_itemSize.width * indexKey + touch.localPosition.dx) /
-          _itemSize.width;
+      final int indexKey = widget.segments.keys.toList().indexOf(value);
+      final double indexMove =
+          (_itemSize.width * indexKey + touch.localPosition.dx) /
+              _itemSize.width;
       if (indexMove >= 0 && indexMove <= widget.segments.keys.length) {
         _controller.value = widget.segments.keys.elementAt(indexMove.toInt());
       }

@@ -66,7 +66,7 @@ class AdvancedSegment extends StatefulWidget {
 
 class _AdvancedSegmentState extends State<AdvancedSegment>
     with SingleTickerProviderStateMixin {
-  final _defaultTextStyle = TextStyle(
+  final _defaultTextStyle = const TextStyle(
     fontWeight: FontWeight.w400,
     fontSize: 14,
     color: Colors.black,
@@ -103,9 +103,8 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
   }
 
   void initSizes() {
-    final maxSize = widget.segments.values
-        .map((text) => _obtainTextSize(text))
-        .reduce((value, element) =>
+    final maxSize = widget.segments.values.map(_obtainTextSize).reduce(
+        (value, element) =>
             value.width.compareTo(element.width) >= 1 ? value : element);
 
     _itemSize = Size(

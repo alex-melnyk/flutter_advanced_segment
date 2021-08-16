@@ -157,8 +157,7 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
       builder: (context, child) {
         return Transform.translate(
           offset: Tween<Offset>(
-            // ignore: use_named_constants
-            begin: const Offset(0, 0),
+            begin: Offset(0, 0),
             end: Offset(_itemSize.width * (widget.segments.length - 1), 0),
           )
               .animate(CurvedAnimation(

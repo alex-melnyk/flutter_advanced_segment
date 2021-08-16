@@ -257,11 +257,8 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
       int indexKey = widget.segments.keys.toList().indexOf(value);
       var indexMove = (_itemSize.width * indexKey + touch.localPosition.dx) /
           _itemSize.width;
-      try {
+      if (indexMove >= 0 && indexMove <= widget.segments.keys.length) {
         _controller.value = widget.segments.keys.elementAt(indexMove.toInt());
-        print(_controller.value);
-      } catch (e) {
-        print(e);
       }
     }
   }

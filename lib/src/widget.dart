@@ -66,7 +66,7 @@ class AdvancedSegment extends StatefulWidget {
 
 class _AdvancedSegmentState extends State<AdvancedSegment>
     with SingleTickerProviderStateMixin {
-  final _defaultTextStyle = TextStyle(
+  final _defaultTextStyle = const TextStyle(
     fontWeight: FontWeight.w400,
     fontSize: 14,
     color: Colors.black,
@@ -103,9 +103,8 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
   }
 
   void initSizes() {
-    final maxSize = widget.segments.values
-        .map((text) => _obtainTextSize(text))
-        .reduce((value, element) =>
+    final maxSize = widget.segments.values.map(_obtainTextSize).reduce(
+        (value, element) =>
             value.width.compareTo(element.width) >= 1 ? value : element);
 
     _itemSize = Size(
@@ -158,7 +157,8 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
       builder: (context, child) {
         return Transform.translate(
           offset: Tween<Offset>(
-            begin: Offset(0, 0),
+            // ignore: use_named_constants
+            begin: const Offset(0, 0),
             end: Offset(_itemSize.width * (widget.segments.length - 1), 0),
           )
               .animate(CurvedAnimation(

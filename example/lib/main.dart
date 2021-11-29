@@ -12,6 +12,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final _selectedSegment_0 = AdvancedSegmentController('all');
+  final _selectedSegment_01 = AdvancedSegmentController('all');
   final _selectedSegment_1 = AdvancedSegmentController('all');
   final _selectedSegment_2 = AdvancedSegmentController('all');
   final _selectedSegment_3 = AdvancedSegmentController('all');
@@ -38,6 +39,14 @@ class _MyAppState extends State<MyApp> {
                     'starred': 'Starred',
                   },
                   controller: _selectedSegment_0,
+                ),
+                _buildLabel('Regular Right to Left'),
+                Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: AdvancedSegment(
+                    controller: _selectedSegment_01,
+                    segments: {'all': 'All', 'starred': 'Starred'},
+                  ),
                 ),
                 _buildLabel('Disabled'),
                 Row(

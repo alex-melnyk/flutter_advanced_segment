@@ -195,7 +195,7 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
           children: widget.segments.entries.map((entry) {
             return GestureDetector(
               onHorizontalDragUpdate: (detect) =>
-                  _handleSegmentMovi(detect, entry.key),
+                  _handleSegmentMovi(detect, entry.key, Directionality.of(context)),
               onTap: () => _handleSegmentPressed(entry.key),
               child: Container(
                 width: _itemSize.width,
@@ -251,12 +251,21 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
     }
   }
 
-  void _handleSegmentMovi(DragUpdateDetails touch, String value) {
+  void _handleSegmentMovi(DragUpdateDetails touch, String value, TextDirection textDirection) {
     if (widget.controller != null) {
       final int indexKey = widget.segments.keys.toList().indexOf(value);
-      final double indexMove =
+      var indexMove;
+
+      if (textDirection == TextDirection.rtl) {
+        indexMove =
+          (_itemSize.width * indexKey - touch.localPosition.dx) /
+              _itemSize.width + 1;
+      } else {
+        indexMove =
           (_itemSize.width * indexKey + touch.localPosition.dx) /
               _itemSize.width;
+      }
+
       if (indexMove >= 0 && indexMove <= widget.segments.keys.length) {
         _controller.value = widget.segments.keys.elementAt(indexMove.toInt());
       }

@@ -157,8 +157,8 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
       builder: (context, child) {
         return Transform.translate(
           offset: Tween<Offset>(
-            begin: Offset(0, 0),
-            end: Offset(_itemSize.width * (widget.segments.length - 1), 0),
+            begin: Offset.zero,
+            end: _obtainEndOffset(Directionality.of(context)),
           )
               .animate(CurvedAnimation(
                 parent: _animationController,
@@ -261,6 +261,14 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
         _controller.value = widget.segments.keys.elementAt(indexMove.toInt());
       }
     }
+  }
+
+  Offset _obtainEndOffset(TextDirection textDirection) {
+    if (textDirection == TextDirection.rtl) {
+      return Offset(-(_itemSize.width * (widget.segments.length - 1)), 0);
+    }
+
+    return Offset(_itemSize.width * (widget.segments.length - 1), 0);
   }
 
   @override

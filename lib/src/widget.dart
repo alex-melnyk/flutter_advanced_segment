@@ -59,14 +59,14 @@ class AdvancedSegment extends StatefulWidget {
 
   /// Slide's Shadow
   final List<BoxShadow>? shadow;
-  
+
   @override
   _AdvancedSegmentState createState() => _AdvancedSegmentState();
 }
 
 class _AdvancedSegmentState extends State<AdvancedSegment>
     with SingleTickerProviderStateMixin {
-  final _defaultTextStyle = TextStyle(
+  final _defaultTextStyle = const TextStyle(
     fontWeight: FontWeight.w400,
     fontSize: 14,
     color: Colors.black,
@@ -103,9 +103,8 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
   }
 
   void initSizes() {
-    final maxSize = widget.segments.values
-        .map((text) => _obtainTextSize(text))
-        .reduce((value, element) =>
+    final maxSize = widget.segments.values.map(_obtainTextSize).reduce(
+        (value, element) =>
             value.width.compareTo(element.width) >= 1 ? value : element);
 
     _itemSize = Size(
@@ -158,8 +157,8 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
       builder: (context, child) {
         return Transform.translate(
           offset: Tween<Offset>(
-            begin: Offset(0, 0),
-            end: Offset(_itemSize.width * (widget.segments.length - 1), 0),
+            begin: Offset.zero,
+            end: _obtainEndOffset(Directionality.of(context)),
           )
               .animate(CurvedAnimation(
                 parent: _animationController,
@@ -195,6 +194,8 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
           crossAxisAlignment: CrossAxisAlignment.center,
           children: widget.segments.entries.map((entry) {
             return GestureDetector(
+              onHorizontalDragUpdate: (detect) =>
+                  _handleSegmentMovi(detect, entry.key),
               onTap: () => _handleSegmentPressed(entry.key),
               child: Container(
                 width: _itemSize.width,
@@ -248,6 +249,26 @@ class _AdvancedSegmentState extends State<AdvancedSegment>
     if (widget.controller != null) {
       _controller.value = value;
     }
+  }
+
+  void _handleSegmentMovi(DragUpdateDetails touch, String value) {
+    if (widget.controller != null) {
+      final int indexKey = widget.segments.keys.toList().indexOf(value);
+      final double indexMove =
+          (_itemSize.width * indexKey + touch.localPosition.dx) /
+              _itemSize.width;
+      if (indexMove >= 0 && indexMove <= widget.segments.keys.length) {
+        _controller.value = widget.segments.keys.elementAt(indexMove.toInt());
+      }
+    }
+  }
+
+  Offset _obtainEndOffset(TextDirection textDirection) {
+    if (textDirection == TextDirection.rtl) {
+      return Offset(-(_itemSize.width * (widget.segments.length - 1)), 0);
+    }
+
+    return Offset(_itemSize.width * (widget.segments.length - 1), 0);
   }
 
   @override

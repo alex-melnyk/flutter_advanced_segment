@@ -1,3 +1,7 @@
+## 2.0.2
+
+* RTL added for Arabic
+
 ## 2.0.1+2
 
 * Using example added.

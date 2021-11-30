@@ -1,3 +1,7 @@
+## 2.0.2+1
+
+* RTL dragging fix
+
 ## 2.0.2
 
 * RTL added for Arabic

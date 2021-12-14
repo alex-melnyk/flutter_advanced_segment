@@ -1,17 +1,11 @@
 # flutter_advanced_segment
 An advanced segment widget, that can be fully customized with bunch of properties, just try it and enjoy! 
 
-| State 1 | State 2 |
-|:-:|:-:|
-| ![Flutter Advanced Segment State 1](./SEGMENT_STATE_1.jpg) | ![Flutter Advanced Segment State 2](./SEGMENT_STATE_2.jpg) |
+| | |
+|---|---|
+| ![Flutter Advanced Segment](./PREVIEW_01.png) | ![Flutter Advanced Segment](./PREVIEW_02.png) |
 
 ## Examples
-
-### Use like TabBar
-
-```dart
-
-```
 
 ### Regular Segment
 

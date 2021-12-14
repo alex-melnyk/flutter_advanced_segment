@@ -1,6 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_segment/flutter_advanced_segment.dart';
 
+enum Segment {
+  all,
+  starred,
+}
+
+extension SegmentsExtension on Segment {
+  String get label {
+    switch (this) {
+      case Segment.all:
+        return 'All Files';
+      case Segment.starred:
+        return 'Starred Files';
+      default:
+        return 'Unrecognized';
+    }
+  }
+
+  bool get isAll => this == Segment.all;
+
+  bool get isStarred => this == Segment.starred;
+}
+
 void main() {
   runApp(MyApp());
 }
@@ -11,12 +33,13 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _selectedSegment_0 = AdvancedSegmentController('all');
-  final _selectedSegment_01 = AdvancedSegmentController('all');
-  final _selectedSegment_1 = AdvancedSegmentController('all');
-  final _selectedSegment_2 = AdvancedSegmentController('all');
-  final _selectedSegment_3 = AdvancedSegmentController('all');
-  final _selectedSegment_4 = AdvancedSegmentController('all');
+  final _selectedSegment_00 = ValueNotifier('all');
+  final _selectedSegment_01 = ValueNotifier('all');
+  final _selectedSegment_02 = ValueNotifier('all');
+  final _selectedSegment_03 = ValueNotifier('all');
+  final _selectedSegment_04 = ValueNotifier('all');
+  final _selectedSegment_05 = ValueNotifier('all');
+  final _selectedSegment_06 = ValueNotifier(Segment.all);
 
   @override
   Widget build(BuildContext context) {
@@ -32,23 +55,7 @@ class _MyAppState extends State<MyApp> {
           child: Center(
             child: Column(
               children: [
-                _buildLabel('Regular'),
-                AdvancedSegment(
-                  segments: {
-                    'all': 'All',
-                    'starred': 'Starred',
-                  },
-                  controller: _selectedSegment_0,
-                ),
-                _buildLabel('Regular Right to Left'),
-                Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: AdvancedSegment(
-                    controller: _selectedSegment_01,
-                    segments: {'all': 'All', 'starred': 'Starred'},
-                  ),
-                ),
-                _buildLabel('Disabled'),
+                _buildLabel('Regular & RTL (right-to-left)'),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -57,24 +64,54 @@ class _MyAppState extends State<MyApp> {
                         'all': 'All',
                         'starred': 'Starred',
                       },
+                      controller: _selectedSegment_00,
                     ),
-                    SizedBox(
-                      width: 10,
+                    SizedBox(width: 8),
+                    Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: AdvancedSegment(
+                        controller: _selectedSegment_01,
+                        segments: {
+                          'all': 'All',
+                          'starred': 'Starred',
+                        },
+                      ),
                     ),
-                    AdvancedSegment(
-                      segments: {
-                        'all': 'All',
-                        'starred': 'Starred',
-                      },
-                    )
                   ],
+                ),
+                _buildLabel('Disabled'),
+                AdvancedSegment(
+                  segments: {
+                    'all': 'All',
+                    'starred': 'Starred',
+                  },
+                ),
+                _buildLabel('Custom Slider'),
+                AdvancedSegment(
+                  controller: _selectedSegment_02,
+                  segments: {
+                    'all': 'All',
+                    'starred': 'Starred',
+                  },
+                  sliderDecoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: Colors.black,
+                      width: 2,
+                    ),
+                  ),
+                  activeStyle: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 _buildLabel('Colorized'),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     AdvancedSegment(
-                      controller: _selectedSegment_1,
+                      controller: _selectedSegment_02,
                       segments: {
                         'all': 'All',
                         'starred': 'Starred',
@@ -93,7 +130,7 @@ class _MyAppState extends State<MyApp> {
                       width: 10,
                     ),
                     AdvancedSegment(
-                      controller: _selectedSegment_2,
+                      controller: _selectedSegment_03,
                       segments: {
                         'all': 'All',
                         'starred': 'Starred',
@@ -112,7 +149,7 @@ class _MyAppState extends State<MyApp> {
                 ),
                 _buildLabel('Multiple Items'),
                 AdvancedSegment(
-                  controller: _selectedSegment_3,
+                  controller: _selectedSegment_04,
                   segments: {
                     'all': 'All',
                     'primary': 'Primary',
@@ -120,16 +157,19 @@ class _MyAppState extends State<MyApp> {
                     'tertiary': 'Tertiary',
                   },
                 ),
-                _buildLabel('Black Style'),
                 Container(
                   width: double.infinity,
-                  padding: EdgeInsets.all(20),
+                  margin: const EdgeInsets.only(
+                    top: 40,
+                  ),
+                  padding: const EdgeInsets.all(20),
                   color: Colors.black87,
                   child: Column(
                     children: [
+                      _buildLabel('Black Style', color: Colors.white70),
                       Center(
                         child: AdvancedSegment(
-                          controller: _selectedSegment_4,
+                          controller: _selectedSegment_05,
                           segments: {
                             'all': 'All',
                             'missed': 'Missed',
@@ -145,43 +185,46 @@ class _MyAppState extends State<MyApp> {
                           sliderColor: Colors.white38,
                         ),
                       ),
-                      ValueListenableBuilder<String>(
-                        valueListenable: _selectedSegment_4,
-                        builder: (_, key, __) {
-                          switch (key) {
-                            case 'all':
-                              return SizedBox(
-                                height: 240,
-                                child: Center(
-                                  child: Text(
+                      SizedBox(
+                        height: 128,
+                        child: Center(
+                          child: ValueListenableBuilder<String>(
+                            valueListenable: _selectedSegment_05,
+                            builder: (_, key, __) {
+                              switch (key) {
+                                case 'all':
+                                  return const Text(
                                     'All calls',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w600,
                                     ),
-                                  ),
-                                ),
-                              );
-                            case 'missed':
-                              return SizedBox(
-                                height: 240,
-                                child: Center(
-                                  child: Text(
+                                  );
+                                case 'missed':
+                                  return const Text(
                                     'Missed calls',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w600,
                                     ),
-                                  ),
-                                ),
-                              );
-                            default:
-                              return const SizedBox();
-                          }
-                        },
+                                  );
+                                default:
+                                  return const SizedBox();
+                              }
+                            },
+                          ),
+                        ),
                       ),
                     ],
                   ),
+                ),
+                _buildLabel('Typed keys'),
+                AdvancedSegment(
+                  controller: _selectedSegment_06,
+                  segments: {
+                    Segment.all: Segment.all.label,
+                    Segment.starred: Segment.starred.label,
+                  },
                 ),
               ],
             ),
@@ -191,14 +234,20 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  Widget _buildLabel(String label) {
+  Widget _buildLabel(
+    String label, {
+    Color color = Colors.black87,
+  }) {
     return Container(
       padding: const EdgeInsets.symmetric(
         vertical: 25,
       ),
       child: Row(
         children: [
-          Expanded(child: Divider()),
+          Expanded(
+              child: Divider(
+            color: color,
+          )),
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 10,
@@ -208,11 +257,14 @@ class _MyAppState extends State<MyApp> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: Colors.black45,
+                color: color,
               ),
             ),
           ),
-          Expanded(child: Divider()),
+          Expanded(
+              child: Divider(
+            color: color,
+          )),
         ],
       ),
     );

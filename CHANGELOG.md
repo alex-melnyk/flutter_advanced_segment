@@ -1,3 +1,8 @@
+## 3.0.0
+
+* Controller removed coz it's useless.
+* Generic types applied to a widget.
+
 ## 2.0.2+1
 
 * RTL dragging fix

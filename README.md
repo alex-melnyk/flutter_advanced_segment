@@ -1,8 +1,7 @@
 # flutter_advanced_segment
 An advanced segment widget, that can be fully customized with bunch of properties, just try it and enjoy! 
 
-| : Flutter Advanced Segment : |||
-| :----- | :----- |
+| ----- | ----- |
 | ![Flutter Advanced Segment](./PREVIEW_01.png) | ![Flutter Advanced Segment](./PREVIEW_02.png) |
 
 ## Examples

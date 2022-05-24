@@ -77,7 +77,8 @@ class _AdvancedSegmentState<K extends Object, V extends String>
     fontSize: 14,
     color: Color(0xFF000000),
   );
-  late AnimationController _animationController;
+  late final AnimationController _animationController;
+  late final ValueNotifier<K> _defaultController;
   late ValueNotifier<K> _controller;
   late Size _itemSize;
   late Size _containerSize;
@@ -86,19 +87,12 @@ class _AdvancedSegmentState<K extends Object, V extends String>
   void initState() {
     super.initState();
 
-    _controller =
-        widget.controller ?? ValueNotifier<K>(widget.segments.keys.first);
+    _initSizes();
 
-    _controller.addListener(() {
-      final animationValue = _obtainAnimationValue();
+    _defaultController = ValueNotifier<K>(widget.segments.keys.first);
 
-      _animationController.animateTo(
-        animationValue,
-        duration: widget.animationDuration,
-      );
-    });
-
-    initSizes();
+    _controller = widget.controller ?? _defaultController;
+    _controller.addListener(_handleControllerChanged);
 
     _animationController = AnimationController(
       vsync: this,
@@ -107,10 +101,20 @@ class _AdvancedSegmentState<K extends Object, V extends String>
     );
   }
 
-  void initSizes() {
-    final maxSize = widget.segments.values.map(_obtainTextSize).reduce(
-        (value, element) =>
-            value.width.compareTo(element.width) >= 1 ? value : element);
+  void _handleControllerChanged() {
+    final animationValue = _obtainAnimationValue();
+
+    _animationController.animateTo(
+      animationValue,
+      duration: widget.animationDuration,
+    );
+  }
+
+  void _initSizes() {
+    final maxSize =
+        widget.segments.values.map(_obtainTextSize).reduce((value, element) {
+      return value.width.compareTo(element.width) >= 1 ? value : element;
+    });
 
     _itemSize = Size(
       maxSize.width + widget.itemPadding.horizontal,
@@ -127,8 +131,17 @@ class _AdvancedSegmentState<K extends Object, V extends String>
   void didUpdateWidget(covariant AdvancedSegment<K, V> oldWidget) {
     super.didUpdateWidget(oldWidget);
 
+    if (oldWidget.controller != widget.controller) {
+      _controller.removeListener(_handleControllerChanged);
+      _controller = widget.controller ?? _defaultController;
+
+      _handleControllerChanged();
+
+      _controller.addListener(_handleControllerChanged);
+    }
+
     if (oldWidget.segments != widget.segments) {
-      initSizes();
+      _initSizes();
 
       _animationController.value = _obtainAnimationValue();
     }
@@ -276,18 +289,18 @@ class _AdvancedSegmentState<K extends Object, V extends String>
   }
 
   Offset _obtainEndOffset(TextDirection textDirection) {
-    return textDirection == TextDirection.rtl
-        ? Offset(-(_itemSize.width * (widget.segments.length - 1)), 0)
-        : Offset(_itemSize.width * (widget.segments.length - 1), 0);
+    final dx = _itemSize.width * (widget.segments.length - 1);
+
+    return Offset(textDirection == TextDirection.rtl ? -dx : dx, 0);
   }
 
   @override
   void dispose() {
     _animationController.dispose();
 
-    if (widget.controller == null) {
-      _controller.dispose();
-    }
+    _controller.removeListener(_handleControllerChanged);
+
+    _defaultController.dispose();
 
     super.dispose();
   }

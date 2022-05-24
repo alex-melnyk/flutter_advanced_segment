@@ -1,3 +1,7 @@
+## 3.0.1
+
+* Calling animateTo after dispose issue fixed.
+
 ## 3.0.0
 
 * Controller removed coz it's useless.

@@ -1,4 +1,4 @@
-package com.listlink.flutter_advanced_segment_example
+package com.example.example
 
 import io.flutter.embedding.android.FlutterActivity
 

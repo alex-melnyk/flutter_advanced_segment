@@ -1,3 +1,7 @@
+## 3.0.2
+
+* canvas size issue fixed.
+
 ## 3.0.1
 
 * Calling animateTo after dispose issue fixed.

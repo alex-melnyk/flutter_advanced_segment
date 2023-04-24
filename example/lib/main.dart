@@ -55,6 +55,20 @@ class _MyAppState extends State<MyApp> {
           child: Center(
             child: Column(
               children: [
+                Container(
+                  width: double.maxFinite,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                  ),
+                  child: AdvancedSegment(
+                    segments: {
+                      'all': 'All',
+                      'starred': 'Starred',
+                    },
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    controller: _selectedSegment_00,
+                  ),
+                ),
                 _buildLabel('Regular & RTL (right-to-left)'),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -126,9 +140,7 @@ class _MyAppState extends State<MyApp> {
                       backgroundColor: Colors.orange,
                       sliderColor: Colors.deepOrange,
                     ),
-                    SizedBox(
-                      width: 10,
-                    ),
+                    SizedBox(width: 10),
                     AdvancedSegment(
                       controller: _selectedSegment_03,
                       segments: {
@@ -151,72 +163,96 @@ class _MyAppState extends State<MyApp> {
                 AdvancedSegment(
                   controller: _selectedSegment_04,
                   segments: {
-                    'all': 'All',
                     'primary': 'Primary',
                     'secondary': 'Secondary',
                     'tertiary': 'Tertiary',
                   },
                 ),
-                Container(
-                  width: double.infinity,
-                  margin: const EdgeInsets.only(
-                    top: 40,
+                Theme(
+                  data: ThemeData.dark().copyWith(
+                    indicatorColor: Colors.deepPurpleAccent,
                   ),
-                  padding: const EdgeInsets.all(20),
-                  color: Colors.black87,
-                  child: Column(
-                    children: [
-                      _buildLabel('Black Style', color: Colors.white70),
-                      Center(
-                        child: AdvancedSegment(
-                          controller: _selectedSegment_05,
-                          segments: {
-                            'all': 'All',
-                            'missed': 'Missed',
-                          },
-                          backgroundColor: Colors.white10,
-                          activeStyle: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          inactiveStyle: TextStyle(
-                            color: Colors.white,
-                          ),
-                          sliderColor: Colors.white38,
-                        ),
+                  child: Builder(builder: (context) {
+                    final theme = Theme.of(context);
+
+                    return Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.only(
+                        top: 40,
                       ),
-                      SizedBox(
-                        height: 128,
-                        child: Center(
-                          child: ValueListenableBuilder<String>(
-                            valueListenable: _selectedSegment_05,
-                            builder: (_, key, __) {
-                              switch (key) {
-                                case 'all':
-                                  return const Text(
-                                    'All calls',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  );
-                                case 'missed':
-                                  return const Text(
-                                    'Missed calls',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  );
-                                default:
-                                  return const SizedBox();
-                              }
-                            },
+                      padding: const EdgeInsets.all(20),
+                      color: theme.scaffoldBackgroundColor,
+                      child: Column(
+                        children: [
+                          _buildLabel('Dark Style', color: Colors.white70),
+                          Center(
+                            child: AdvancedSegment(
+                              controller: _selectedSegment_05,
+                              segments: {
+                                'all': 'All',
+                                'missed': 'Missed',
+                              },
+                              backgroundColor: theme.cardColor,
+                              activeStyle: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              inactiveStyle: TextStyle(
+                                color: Colors.white,
+                              ),
+                              sliderColor: theme.indicatorColor,
+                            ),
                           ),
-                        ),
+                          SizedBox(
+                            height: 128,
+                            child: Center(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      bottom: 8.0,
+                                    ),
+                                    child: Text(
+                                      'Selected segment:',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineSmall,
+                                    ),
+                                  ),
+                                  ValueListenableBuilder<String>(
+                                    valueListenable: _selectedSegment_05,
+                                    builder: (_, key, __) {
+                                      switch (key) {
+                                        case 'all':
+                                          return const Text(
+                                            'All calls',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          );
+                                        case 'missed':
+                                          return const Text(
+                                            'Missed calls',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          );
+                                        default:
+                                          return const SizedBox();
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    );
+                  }),
                 ),
                 _buildLabel('Typed keys'),
                 AdvancedSegment(

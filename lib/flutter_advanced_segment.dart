@@ -92,7 +92,7 @@ class _AdvancedSegmentState<K extends Object, V extends String>
     _defaultController = ValueNotifier<K>(widget.segments.keys.first);
 
     _controller = widget.controller ?? _defaultController;
-    _controller.addListener(_handleControllerChanged);
+    _controller.addListener(_refreshThumbPosition);
 
     _animationController = AnimationController(
       vsync: this,
@@ -101,7 +101,122 @@ class _AdvancedSegmentState<K extends Object, V extends String>
     );
   }
 
-  void _handleControllerChanged() {
+  @override
+  void didUpdateWidget(covariant AdvancedSegment<K, V> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.controller != widget.controller) {
+      _controller.removeListener(_refreshThumbPosition);
+      _controller = widget.controller ?? _defaultController;
+
+      _refreshThumbPosition();
+
+      _controller.addListener(_refreshThumbPosition);
+    }
+
+    if (oldWidget.segments != widget.segments) {
+      _initSizes();
+
+      if (!widget.segments.keys.contains(_controller.value)) {
+        _controller.value = widget.segments.keys.first;
+      }
+      _animationController.value = _obtainAnimationValue();
+
+      _refreshThumbPosition();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<K>(
+      valueListenable: _controller,
+      builder: (context, value, child) {
+        final valueIndex = widget.segments.keys.toList().indexOf(value);
+
+        return Container(
+          constraints: BoxConstraints.tightFor(
+            width: _containerSize.width,
+            height: _containerSize.height,
+          ),
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            color: widget.backgroundColor,
+            borderRadius: widget.borderRadius,
+          ),
+          child: Opacity(
+            opacity: widget.controller != null ? 1 : 0.75,
+            child: Stack(
+              clipBehavior: Clip.hardEdge,
+              fit: StackFit.expand,
+              children: [
+                AnimatedAlign(
+                  duration: widget.animationDuration,
+                  curve: Curves.ease,
+                  alignment: _obtainAlignment(valueIndex),
+                  child: FractionallySizedBox(
+                    widthFactor: 1 / widget.segments.length,
+                    heightFactor: 1,
+                    child: Container(
+                      margin: EdgeInsets.all(widget.sliderOffset),
+                      decoration: widget.sliderDecoration ??
+                          BoxDecoration(
+                            color: widget.sliderColor,
+                            borderRadius: widget.borderRadius.subtract(
+                              BorderRadius.all(
+                                Radius.circular(widget.sliderOffset),
+                              ),
+                            ),
+                            boxShadow: widget.shadow,
+                          ),
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    for (final entry in widget.segments.entries)
+                      Expanded(
+                        child: GestureDetector(
+                          onHorizontalDragUpdate: (details) =>
+                              _handleSegmentMove(
+                            details,
+                            entry.key,
+                            Directionality.of(context),
+                          ),
+                          onTap: () => _handleSegmentPressed(entry.key),
+                          child: Container(
+                            height: _itemSize.height,
+                            color: const Color(0x00000000),
+                            alignment: Alignment.center,
+                            child: AnimatedDefaultTextStyle(
+                              duration: widget.animationDuration,
+                              style: _defaultTextStyle.merge(value == entry.key
+                                  ? widget.activeStyle
+                                  : widget.inactiveStyle),
+                              overflow: TextOverflow.clip,
+                              maxLines: 1,
+                              softWrap: false,
+                              child: Text(
+                                entry.value,
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.clip,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _refreshThumbPosition() {
     final animationValue = _obtainAnimationValue();
 
     _animationController.animateTo(
@@ -124,116 +239,6 @@ class _AdvancedSegmentState<K extends Object, V extends String>
     _containerSize = Size(
       _itemSize.width * widget.segments.length,
       _itemSize.height,
-    );
-  }
-
-  @override
-  void didUpdateWidget(covariant AdvancedSegment<K, V> oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (oldWidget.controller != widget.controller) {
-      _controller.removeListener(_handleControllerChanged);
-      _controller = widget.controller ?? _defaultController;
-
-      _handleControllerChanged();
-
-      _controller.addListener(_handleControllerChanged);
-    }
-
-    if (oldWidget.segments != widget.segments) {
-      _initSizes();
-
-      _animationController.value = _obtainAnimationValue();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: _containerSize.width,
-      height: _containerSize.height,
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        color: widget.backgroundColor,
-        borderRadius: widget.borderRadius,
-      ),
-      child: Opacity(
-        opacity: widget.controller != null ? 1 : 0.75,
-        child: Stack(
-          children: [
-            AnimatedBuilder(
-              animation: _animationController,
-              builder: (_, child) {
-                return Transform.translate(
-                  offset: Tween<Offset>(
-                    begin: Offset.zero,
-                    end: _obtainEndOffset(Directionality.of(context)),
-                  )
-                      .animate(CurvedAnimation(
-                        parent: _animationController,
-                        curve: Curves.linear,
-                      ))
-                      .value,
-                  child: child,
-                );
-              },
-              child: FractionallySizedBox(
-                widthFactor: 1 / widget.segments.length,
-                heightFactor: 1,
-                child: Container(
-                  margin: EdgeInsets.all(widget.sliderOffset),
-                  // height: _itemSize.height - widget.sliderOffset * 2,
-                  decoration: widget.sliderDecoration ??
-                      BoxDecoration(
-                        color: widget.sliderColor,
-                        borderRadius: widget.borderRadius.subtract(
-                            BorderRadius.all(
-                                Radius.circular(widget.sliderOffset))),
-                        boxShadow: widget.shadow,
-                      ),
-                ),
-              ),
-            ),
-            ValueListenableBuilder(
-              valueListenable: _controller,
-              builder: (_, value, __) {
-                return Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: widget.segments.entries.map((entry) {
-                    return GestureDetector(
-                      onHorizontalDragUpdate: (details) => _handleSegmentMove(
-                        details,
-                        entry.key,
-                        Directionality.of(context),
-                      ),
-                      onTap: () => _handleSegmentPressed(entry.key),
-                      child: Container(
-                        width: _itemSize.width,
-                        height: _itemSize.height,
-                        color: const Color(0x00000000),
-                        child: AnimatedDefaultTextStyle(
-                          duration: widget.animationDuration,
-                          style: _defaultTextStyle.merge(value == entry.key
-                              ? widget.activeStyle
-                              : widget.inactiveStyle),
-                          overflow: TextOverflow.clip,
-                          maxLines: 1,
-                          softWrap: false,
-                          child: Center(
-                            child: Text(entry.value),
-                          ),
-                        ),
-                      ),
-                    );
-                  }).toList(growable: false),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
     );
   }
 
@@ -288,17 +293,20 @@ class _AdvancedSegmentState<K extends Object, V extends String>
     }
   }
 
-  Offset _obtainEndOffset(TextDirection textDirection) {
-    final dx = _itemSize.width * (widget.segments.length - 1);
-
-    return Offset(textDirection == TextDirection.rtl ? -dx : dx, 0);
+  Alignment _obtainAlignment(int index) {
+    final textDirection = Directionality.of(context);
+    final alignmentValue = 2 * (index / (widget.segments.length - 1)) - 1;
+    return Alignment(
+      textDirection == TextDirection.rtl ? -alignmentValue : alignmentValue,
+      0,
+    );
   }
 
   @override
   void dispose() {
     _animationController.dispose();
 
-    _controller.removeListener(_handleControllerChanged);
+    _controller.removeListener(_refreshThumbPosition);
 
     _defaultController.dispose();
 

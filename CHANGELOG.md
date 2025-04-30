@@ -1,3 +1,7 @@
+## 3.1.0
+
+* Allow disable drag gesture.
+
 ## 3.0.2
 
 * canvas size issue fixed.

@@ -27,6 +27,7 @@ class AdvancedSegment<K extends Object, V extends String>
       ),
     ],
     this.sliderDecoration,
+    this.enableDrag = true,
   })  : assert(segments.length > 1, 'Minimum segments amount is 2'),
         super(key: key);
 
@@ -65,6 +66,9 @@ class AdvancedSegment<K extends Object, V extends String>
 
   /// Slider decoration
   final BoxDecoration? sliderDecoration;
+
+  /// Draggable handle
+  final bool enableDrag;
 
   @override
   _AdvancedSegmentState<K, V> createState() => _AdvancedSegmentState();
@@ -178,12 +182,13 @@ class _AdvancedSegmentState<K extends Object, V extends String>
                     for (final entry in widget.segments.entries)
                       Expanded(
                         child: GestureDetector(
-                          onHorizontalDragUpdate: (details) =>
-                              _handleSegmentMove(
-                            details,
-                            entry.key,
-                            Directionality.of(context),
-                          ),
+                          onHorizontalDragUpdate: widget.enableDrag
+                              ? (details) => _handleSegmentMove(
+                                    details,
+                                    entry.key,
+                                    Directionality.of(context),
+                                  )
+                              : null,
                           onTap: () => _handleSegmentPressed(entry.key),
                           child: Container(
                             height: _itemSize.height,

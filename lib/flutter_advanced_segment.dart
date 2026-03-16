@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
-/// An advanced
+/// An advanced segment widget, that can be fully customized with bunch of
+/// properties, just try it and enjoy!
 class AdvancedSegment<K extends Object, V extends String>
     extends StatefulWidget {
   const AdvancedSegment({
@@ -15,8 +16,10 @@ class AdvancedSegment<K extends Object, V extends String>
       horizontal: 15,
       vertical: 10,
     ),
-    this.borderRadius = const BorderRadius.all(Radius.circular(8.0)),
-    this.backgroundColor = const Color(0x42000000),
+    this.decoration = const BoxDecoration(
+      color: Color(0x42000000),
+      borderRadius: BorderRadius.all(Radius.circular(8.0)),
+    ),
     this.sliderColor = const Color(0xFFFFFFFF),
     this.sliderOffset = 2.0,
     this.animationDuration = const Duration(milliseconds: 250),
@@ -46,14 +49,12 @@ class AdvancedSegment<K extends Object, V extends String>
   /// Padding of each item.
   final EdgeInsetsGeometry itemPadding;
 
-  /// Common border radius.
-  final BorderRadius borderRadius;
+  /// Layout decoration that allows full customization of the segment
+  /// background, including color, border, border radius, gradient, etc.
+  final BoxDecoration decoration;
 
-  /// Color of slider.
+  /// Color of the slider thumb.
   final Color sliderColor;
-
-  /// Layout background color.
-  final Color backgroundColor;
 
   /// Gap between slider and layout.
   final double sliderOffset;
@@ -61,13 +62,14 @@ class AdvancedSegment<K extends Object, V extends String>
   /// Selection animation duration.
   final Duration animationDuration;
 
-  /// Slide's Shadow
+  /// Slider shadow.
   final List<BoxShadow>? shadow;
 
-  /// Slider decoration
+  /// Slider decoration that overrides [sliderColor], border radius
+  /// derived from [decoration], and [shadow] when provided.
   final BoxDecoration? sliderDecoration;
 
-  /// Draggable handle
+  /// Whether the drag gesture is enabled to switch segments.
   final bool enableDrag;
 
   @override
@@ -143,10 +145,7 @@ class _AdvancedSegmentState<K extends Object, V extends String>
             height: _containerSize.height,
           ),
           clipBehavior: Clip.hardEdge,
-          decoration: BoxDecoration(
-            color: widget.backgroundColor,
-            borderRadius: widget.borderRadius,
-          ),
+          decoration: widget.decoration,
           child: Opacity(
             opacity: widget.controller != null ? 1 : 0.75,
             child: Stack(
@@ -165,7 +164,11 @@ class _AdvancedSegmentState<K extends Object, V extends String>
                       decoration: widget.sliderDecoration ??
                           BoxDecoration(
                             color: widget.sliderColor,
-                            borderRadius: widget.borderRadius.subtract(
+                            borderRadius:
+                                (widget.decoration.borderRadius
+                                            as BorderRadius? ??
+                                        BorderRadius.zero)
+                                    .subtract(
                               BorderRadius.all(
                                 Radius.circular(widget.sliderOffset),
                               ),

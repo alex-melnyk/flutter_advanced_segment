@@ -1,3 +1,10 @@
+## 3.2.0
+
+* Replaced `backgroundColor` and `borderRadius` with a single `decoration` parameter for full layout customization (color, border, gradient, etc.).
+* Removed `backgroundColor` parameter (breaking).
+* Removed `borderRadius` parameter (breaking).
+* Updated documentation.
+
 ## 3.1.0
 
 * Allow disable drag gesture.
